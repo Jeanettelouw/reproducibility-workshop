@@ -12,10 +12,9 @@ Aimed at students with bare-minimum Python scripting skills.
 | Path | Role |
 |---|---|
 | `starter_repo/` | Intentionally flawed KNN notebook students audit first |
-| `fill_in_repo/` | Skeleton solution: signatures + TODOs students complete |
-| `solution_repo/` | Fully filled reference; reveal progressively |
+| `fill_in_repo/` | (NOT ADDED YET) Skeleton solution: signatures + TODOs students complete |
+| `solution_repo/` | (NOT ADDED YET) Fully filled reference; reveal progressively |
 | `student_materials/` | Student handout |
-| `../instructor_material/` | Facilitator guide, answer key, checkpoints, troubleshooting |
 
 **Suggested path:** audit in `starter_repo/` → complete TODOs in `fill_in_repo/`
 → consult `solution_repo/` only when invited (or after a checkpoint).
@@ -40,6 +39,5 @@ That is the whole CLI: one config file, three short modules, saved metrics under
 ## Quick links
 
 - Student exercises: `student_materials/STUDENT_HANDOUT.md`
-- Facilitator schedule: `../instructor_material/FACILITATOR_GUIDE.md`
 - Fill-in setup: `fill_in_repo/README.md`
 - Solution setup: `solution_repo/README.md`
