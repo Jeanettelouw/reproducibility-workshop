@@ -4,9 +4,9 @@
 
 ## Your objective
 
-Transform a notebook that “works on my machine” into a project another person
-can clone, configure, run from the command line, and verify — obtaining the
-same numerical results and understanding how they were produced.
+Transform a notebook that “works on my machine” into a small project another
+person can clone, configure, and run from the command line — obtaining the same
+numerical results.
 
 **Research question you will preserve:**
 
@@ -15,10 +15,13 @@ same numerical results and understanding how they were produced.
 
 ## Before you start
 
-1. Install [`uv`](https://docs.astral.sh/uv/) and Git.
-2. Obtain the `starter_repo/` folder from your instructor.
+1. Install Git (and optionally [`uv`](https://docs.astral.sh/uv/)).
+2. Obtain the workshop folders from your instructor (`starter_repo/`,
+   `fill_in_repo/`).
 3. Optional: skim the solution repo only when invited; the learning is in the
-   refactor path.
+   fill-in path.
+
+### Step A — Audit the messy notebook
 
 ```bash
 cd starter_repo
@@ -30,17 +33,26 @@ jupyter lab
 
 Open `notebooks/00_messy_knn_experiment.ipynb` and run all cells once.
 
+### Step B — Complete the fill-in project
+
+After the audit, switch to the skeleton:
+
+```bash
+cd ../fill_in_repo
+python -m venv .venv
+source .venv/bin/activate
+pip install -e .
+```
+
+Fill in every `# TODO` in `reproducible_knn/`. The folder layout and function
+names already match a working solution — you supply the missing bodies.
+
 ---
 
 ## Part 0 — The audit
 
-Without “fixing” the notebook yet, list every reproducibility or design risk
-you notice. For each, note:
-
-- what you observed;
-- whether it is mainly **computational**, **software-engineering**, or
-  **statistical / experimental-design**;
-- how it could change a scientific conclusion.
+Without “fixing” the notebook yet, list every reproducibility risk you notice.
+For each, note what you observed and how it could change a scientific conclusion.
 
 Checkpoint questions:
 
@@ -50,103 +62,104 @@ Checkpoint questions:
 
 ---
 
-## Part 1 — Extract the statistics
+## Part 1 — Extract functions (`fill_in_repo`)
 
-Move data generation and model fitting out of ad-hoc cells into functions (or a
-small package). Aim for:
+In `reproducible_knn/data.py` and `model.py`, complete:
 
-- one function to generate the synthetic moons data (with a scale factor);
-- one function to create a stratified train/test split;
-- one function to build a KNN pipeline (with or without `StandardScaler`).
+- `make_data(...)` — generate the synthetic moons data (with a scale factor)
+- `split_data(...)` — stratified train/test split
+- `make_knn(...)` — build a KNN model, optionally with `StandardScaler` in a
+  `Pipeline`
 
-Success looks like: the notebook *calls* functions instead of pasting the same
-fitting code three times.
+Success looks like: the exploration notebook *calls* these functions instead of
+pasting the same fitting code three times.
+
+**What is a package?** A folder of related functions (with an empty
+`__init__.py`) so you can write `from reproducible_knn.data import make_data`.
+You do not need fancy software design — just a folder.
 
 ---
 
 ## Part 2 — Make randomness an explicit input
 
 - Choose a master seed and pass it into `make_moons` / `train_test_split` /
-  CV splitters.
-- Record the seed next to any saved results.
+  the CV splitter (the TODOs already ask for a `seed` argument).
+- Record the seed next to any saved results (see `config.yaml` and metrics).
 - Confirm: same seed → same split and same selected *k*; new seed → change.
 
 ---
 
 ## Part 3 — Stop leaking information
 
-Refactor so that:
+In `make_knn` / `choose_k`, make sure that:
 
 1. You **do not** standardise the full dataset before splitting.
 2. Scaling, if used, lives inside a `sklearn.pipeline.Pipeline`.
-3. You choose *k* (and scaling) with **cross-validation on the training set**.
-4. You evaluate the held-out test set **exactly once** after selection.
+3. You choose *k* with **cross-validation on the training set**.
+4. You evaluate the held-out test set **exactly once** after selection
+   (that last step belongs in `run_experiment`).
 
 Checkpoint: can you point to the line where the test set is first touched for
 scoring?
 
 ---
 
-## Part 4 — Configuration + a command-line entry point
+## Part 4 — One config file + a run script
 
-Replace hard-coded `n_samples`, `noise`, `k` grids, and paths with YAML (or
-similar). Provide a CLI roughly like:
+`config.yaml` is already sketched. Complete `run_experiment` in
+`reproducible_knn/run.py` so it:
+
+1. loads the YAML (helper provided)
+2. calls your functions
+3. saves `metrics.json` (and figures) under `outputs/run/`
+
+Run it without Jupyter:
 
 ```bash
-uv run python -m reproducible_knn.cli \
-  dataset=moons \
-  preprocessing=scaled \
-  experiment=quick
+python -m reproducible_knn.run
+python -m reproducible_knn.run --seed 42
 ```
 
-Save under a run directory: resolved config, metrics, predictions, metadata,
-and figures.
+(`-m` means “run this file as a program.” That *is* the CLI for this workshop.)
 
 ---
 
 ## Part 5 — Lock the environment
 
-- Declare dependencies in `pyproject.toml`.
-- Produce and commit a lockfile (`uv.lock`).
-- Pin Python 3.12 via `.python-version`.
+Pick one:
 
-```bash
-uv sync --locked
-uv run pytest
-```
+- `pyproject.toml` + `uv.lock` + `uv sync --locked`, or
+- a pinned `requirements.txt` + `pip install -r requirements.txt`
+
+Either way, someone else should be able to recreate your library versions.
 
 ---
 
-## Part 6 — Tests and verification
+## Part 6 — Verify by running twice
 
-Add tests for at least:
-
-- same seed → same data;
-- train/test indices do not overlap;
-- illegal *k* is rejected;
-- selected parameters are repeatable;
-- CLI smoke run writes artifacts.
-
-Then run:
+You do **not** need a large test suite. Do this:
 
 ```bash
-uv run python scripts/verify_reproduction.py
+python -m reproducible_knn.run --seed 1
+cp outputs/run/metrics.json /tmp/a.json
+python -m reproducible_knn.run --seed 1
+# compare /tmp/a.json with outputs/run/metrics.json — they should match
 ```
+
+Then change the seed and confirm the metrics change.
 
 ---
 
 ## Final challenge — the clean machine
 
-On a fresh clone (or CI):
+On a fresh clone (or a classmate’s laptop):
 
 ```bash
-uv sync --locked
-uv run pytest
-uv run python -m reproducible_knn.cli experiment=quick
-uv run python scripts/verify_reproduction.py
+uv sync --locked          # or: pip install -e . / pip install -r requirements.txt
+python -m reproducible_knn.run
 ```
 
-If a stranger can do only this and match your numbers, you succeeded.
+If a stranger can do only this and match your numbers (same seed), you succeeded.
 
 ## Closing reflection
 
