@@ -1,0 +1,6 @@
+# Local tooling caches created during development / CI dry-runs
+.uv-cache/
+.mplconfig/
+.jupyter/
+.ipython/
+solution_repo/
