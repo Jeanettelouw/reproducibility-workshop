@@ -27,7 +27,17 @@ Aimed at students with bare-minimum Python scripting skills.
 
 ## Solution in one glance
 
+**macOS / Linux**
+
 ```bash
+cd solution_repo
+uv sync --locked
+python -m reproducible_knn.run
+```
+
+**Windows (Command Prompt or PowerShell)**
+
+```bat
 cd solution_repo
 uv sync --locked
 python -m reproducible_knn.run

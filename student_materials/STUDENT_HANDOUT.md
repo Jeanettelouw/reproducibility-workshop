@@ -23,13 +23,38 @@ numerical results.
 
 ### Step A — Audit the messy notebook
 
+**macOS / Linux**
+
 ```bash
 cd starter_repo
 python -m venv .venv
-source .venv/bin/activate   # Windows: .venv\Scripts\activate
+source .venv/bin/activate
 pip install -r requirements.txt
 jupyter lab
 ```
+
+**Windows (Command Prompt)**
+
+```bat
+cd starter_repo
+python -m venv .venv
+.venv\Scripts\activate.bat
+pip install -r requirements.txt
+jupyter lab
+```
+
+**Windows (PowerShell)**
+
+```powershell
+cd starter_repo
+python -m venv .venv
+.venv\Scripts\Activate.ps1
+pip install -r requirements.txt
+jupyter lab
+```
+
+If PowerShell blocks activation, run once:
+`Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser`
 
 Open `notebooks/00_messy_knn_experiment.ipynb` and run all cells once.
 
@@ -37,10 +62,30 @@ Open `notebooks/00_messy_knn_experiment.ipynb` and run all cells once.
 
 After the audit, switch to the skeleton:
 
+**macOS / Linux**
+
 ```bash
 cd ../fill_in_repo
 python -m venv .venv
 source .venv/bin/activate
+pip install -e .
+```
+
+**Windows (Command Prompt)**
+
+```bat
+cd ..\fill_in_repo
+python -m venv .venv
+.venv\Scripts\activate.bat
+pip install -e .
+```
+
+**Windows (PowerShell)**
+
+```powershell
+cd ..\fill_in_repo
+python -m venv .venv
+.venv\Scripts\Activate.ps1
 pip install -e .
 ```
 
@@ -139,11 +184,31 @@ Either way, someone else should be able to recreate your library versions.
 
 You do **not** need a large test suite. Do this:
 
+**macOS / Linux**
+
 ```bash
 python -m reproducible_knn.run --seed 1
 cp outputs/run/metrics.json /tmp/a.json
 python -m reproducible_knn.run --seed 1
 # compare /tmp/a.json with outputs/run/metrics.json — they should match
+```
+
+**Windows (Command Prompt)**
+
+```bat
+python -m reproducible_knn.run --seed 1
+copy outputs\run\metrics.json %TEMP%\a.json
+python -m reproducible_knn.run --seed 1
+REM compare %TEMP%\a.json with outputs\run\metrics.json — they should match
+```
+
+**Windows (PowerShell)**
+
+```powershell
+python -m reproducible_knn.run --seed 1
+Copy-Item outputs\run\metrics.json $env:TEMP\a.json
+python -m reproducible_knn.run --seed 1
+# compare $env:TEMP\a.json with outputs\run\metrics.json — they should match
 ```
 
 Then change the seed and confirm the metrics change.

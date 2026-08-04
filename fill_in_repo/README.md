@@ -11,15 +11,43 @@ match the solution; the bodies marked `# TODO` are yours to complete.
 
 ## Setup
 
+**macOS / Linux**
+
 ```bash
 cd fill_in_repo
 python -m venv .venv
-source .venv/bin/activate   # Windows: .venv\Scripts\activate
+source .venv/bin/activate
 pip install -e .
 # or: pip install -r requirements.txt && pip install -e .
 ```
 
-Optional with `uv`:
+**Windows (Command Prompt)**
+
+```bat
+cd fill_in_repo
+python -m venv .venv
+.venv\Scripts\activate.bat
+pip install -e .
+REM or: pip install -r requirements.txt && pip install -e .
+```
+
+**Windows (PowerShell)**
+
+```powershell
+cd fill_in_repo
+python -m venv .venv
+.venv\Scripts\Activate.ps1
+pip install -e .
+# or: pip install -r requirements.txt; pip install -e .
+```
+
+If PowerShell blocks the activate script, run once (current user only):
+
+```powershell
+Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
+```
+
+Optional with `uv` (same on all platforms):
 
 ```bash
 uv sync
@@ -40,7 +68,7 @@ Already provided (do not rewrite unless you want to): package `__init__.py`,
 
 ## Check your work
 
-After the TODOs compile:
+After the TODOs compile (same commands on all platforms):
 
 ```bash
 python -m reproducible_knn.run
