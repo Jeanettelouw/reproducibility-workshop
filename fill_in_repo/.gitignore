@@ -1,0 +1,18 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.ruff_cache/
+.ipynb_checkpoints/
+
+# Virtual environment created by uv
+.venv/
+
+# Generated experiment outputs. We keep the folder (via .gitkeep) but ignore its
+# contents: results are reproduced from code + config, not committed.
+outputs/*
+!outputs/.gitkeep
+
+# OS cruft
+.DS_Store
