@@ -12,7 +12,7 @@ Aimed at students with bare-minimum Python scripting skills.
 | Path | Role |
 |---|---|
 | `starter_repo/` | Intentionally flawed KNN notebook students audit first |
-| `fill_in_repo/` | (NOT ADDED YET) Skeleton solution: signatures + TODOs students complete |
+| `fill_in_repo/` | Skeleton solution: signatures + TODOs students complete |
 | `solution_repo/` | (NOT ADDED YET) Fully filled reference; reveal progressively |
 | `student_materials/` | Student handout |
 
