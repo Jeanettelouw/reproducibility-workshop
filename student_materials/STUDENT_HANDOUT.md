@@ -15,48 +15,34 @@ numerical results.
 
 ## Before you start
 
-1. Install Git (and optionally [`uv`](https://docs.astral.sh/uv/)).
+1. Install Git and [Miniconda](https://docs.conda.io/en/latest/miniconda.html)
+   or Anaconda (so you have the `conda` command).
 2. Obtain the workshop folders from your instructor (`starter_repo/`,
    `fill_in_repo/`).
 3. Optional: skim the solution repo only when invited; the learning is in the
    fill-in path.
 
-### Step A — Audit the messy notebook
-
-**macOS / Linux**
+Create the workshop environment once (Python **3.12**):
 
 ```bash
+conda create -n reproducible-knn python=3.12 -y
+conda activate reproducible-knn
+```
+
+Use this same env for the starter notebook, the fill-in project, and Jupyter.
+In notebooks, select the **reproducible-knn** kernel.
+
+### Step A — Audit the messy notebook
+
+```bash
+conda activate reproducible-knn
 cd starter_repo
-python -m venv .venv
-source .venv/bin/activate
 pip install -r requirements.txt
 jupyter lab
 ```
 
-**Windows (Command Prompt)**
-
-```bat
-cd starter_repo
-python -m venv .venv
-.venv\Scripts\activate.bat
-pip install -r requirements.txt
-jupyter lab
-```
-
-**Windows (PowerShell)**
-
-```powershell
-cd starter_repo
-python -m venv .venv
-.venv\Scripts\Activate.ps1
-pip install -r requirements.txt
-jupyter lab
-```
-
-If PowerShell blocks activation, run once:
-`Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser`
-
-Open `notebooks/00_messy_knn_experiment.ipynb` and run all cells once.
+Open `notebooks/00_messy_knn_experiment.ipynb`, choose the **reproducible-knn**
+kernel, and run all cells once.
 
 ---
 
@@ -74,32 +60,11 @@ Checkpoint questions:
 ---
 ## Part 1 — Extract functions (`fill_in_repo`)
 
-After the audit, switch to the skeleton:
-
-**macOS / Linux**
+After the audit, switch to the skeleton (same conda env):
 
 ```bash
+conda activate reproducible-knn
 cd ../fill_in_repo
-python -m venv .venv
-source .venv/bin/activate
-pip install -e .
-```
-
-**Windows (Command Prompt)**
-
-```bat
-cd ..\fill_in_repo
-python -m venv .venv
-.venv\Scripts\activate.bat
-pip install -e .
-```
-
-**Windows (PowerShell)**
-
-```powershell
-cd ..\fill_in_repo
-python -m venv .venv
-.venv\Scripts\Activate.ps1
 pip install -e .
 ```
 
@@ -165,12 +130,18 @@ python -m reproducible_knn.run --seed 42
 
 ## Part 5 — Lock the environment
 
-Pick one:
+Record how someone else recreates your libraries. Prefer a pinned
+`requirements.txt` (or `pyproject.toml` dependencies) and install into a fresh
+conda env:
 
-- `pyproject.toml` + `uv.lock` + `uv sync --locked`, or
-- a pinned `requirements.txt` + `pip install -r requirements.txt`
+```bash
+conda create -n reproducible-knn python=3.12 -y
+conda activate reproducible-knn
+pip install -r requirements.txt
+# fill_in / solution also need: pip install -e .
+```
 
-Either way, someone else should be able to recreate your library versions.
+Someone else should be able to recreate your library versions this way.
 
 ---
 
@@ -214,7 +185,9 @@ Then change the seed and confirm the metrics change.
 On a fresh clone (or a classmate’s laptop):
 
 ```bash
-uv sync --locked          # or: pip install -e . / pip install -r requirements.txt
+conda create -n reproducible-knn python=3.12 -y
+conda activate reproducible-knn
+pip install -e .          # or: pip install -r requirements.txt && pip install -e .
 python -m reproducible_knn.run
 ```
 

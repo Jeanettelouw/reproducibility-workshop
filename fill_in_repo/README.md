@@ -11,46 +11,33 @@ match the solution; the bodies marked `# TODO` are yours to complete.
 
 ## Setup
 
-**macOS / Linux**
+Same commands on macOS, Linux, and Windows (Anaconda Prompt, or a terminal
+where `conda` is initialised).
+
+If you already created the workshop env for `starter_repo/`, reuse it:
 
 ```bash
+conda activate reproducible-knn
 cd fill_in_repo
-python -m venv .venv
-source .venv/bin/activate
 pip install -e .
 # or: pip install -r requirements.txt && pip install -e .
 ```
 
-**Windows (Command Prompt)**
-
-```bat
-cd fill_in_repo
-python -m venv .venv
-.venv\Scripts\activate.bat
-pip install -e .
-REM or: pip install -r requirements.txt && pip install -e .
-```
-
-**Windows (PowerShell)**
-
-```powershell
-cd fill_in_repo
-python -m venv .venv
-.venv\Scripts\Activate.ps1
-pip install -e .
-# or: pip install -r requirements.txt; pip install -e .
-```
-
-If PowerShell blocks the activate script, run once (current user only):
-
-```powershell
-Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
-```
-
-Optional with `uv` (same on all platforms):
+First time (create the env from scratch):
 
 ```bash
-uv sync
+conda create -n reproducible-knn python=3.12 -y
+conda activate reproducible-knn
+cd fill_in_repo
+pip install -e .
+```
+
+For the exploration notebook, install Jupyter in the same env (once), then
+select the **reproducible-knn** kernel:
+
+```bash
+pip install jupyterlab ipykernel
+jupyter lab
 ```
 
 ## What you fill in
@@ -68,7 +55,7 @@ Already provided (do not rewrite unless you want to): package `__init__.py`,
 
 ## Check your work
 
-After the TODOs compile (same commands on all platforms):
+After the TODOs compile (with `reproducible-knn` activated):
 
 ```bash
 python -m reproducible_knn.run
@@ -79,4 +66,4 @@ Same seed twice → identical `outputs/run/metrics.json`.
 Different seed → metrics change.
 
 You can also explore via `notebooks/01_clean_knn_exploration.ipynb` once the
-functions exist.
+functions exist — use the **reproducible-knn** kernel.

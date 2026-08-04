@@ -27,19 +27,13 @@ Aimed at students with bare-minimum Python scripting skills.
 
 ## Solution in one glance
 
-**macOS / Linux**
+Same commands on macOS, Linux, and Windows:
 
 ```bash
+conda create -n reproducible-knn python=3.12 -y
+conda activate reproducible-knn
 cd solution_repo
-uv sync --locked
-python -m reproducible_knn.run
-```
-
-**Windows (Command Prompt or PowerShell)**
-
-```bat
-cd solution_repo
-uv sync --locked
+pip install -e .
 python -m reproducible_knn.run
 ```
 
