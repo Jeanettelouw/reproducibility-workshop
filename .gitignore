@@ -4,3 +4,4 @@
 .jupyter/
 .ipython/
 solution_repo/
+.venv/

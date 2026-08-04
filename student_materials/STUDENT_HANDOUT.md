@@ -58,7 +58,21 @@ If PowerShell blocks activation, run once:
 
 Open `notebooks/00_messy_knn_experiment.ipynb` and run all cells once.
 
-### Step B — Complete the fill-in project
+---
+
+## Part 0 — The audit
+
+Without “fixing” the notebook yet, list every reproducibility risk you notice.
+For each, note what you observed and how it could change a scientific conclusion.
+
+Checkpoint questions:
+
+- Do you get the same accuracy if you restart the kernel and rerun?
+- Where does randomness enter?
+- Was the test set used only for final evaluation?
+
+---
+## Part 1 — Extract functions (`fill_in_repo`)
 
 After the audit, switch to the skeleton:
 
@@ -88,26 +102,6 @@ python -m venv .venv
 .venv\Scripts\Activate.ps1
 pip install -e .
 ```
-
-Fill in every `# TODO` in `reproducible_knn/`. The folder layout and function
-names already match a working solution — you supply the missing bodies.
-
----
-
-## Part 0 — The audit
-
-Without “fixing” the notebook yet, list every reproducibility risk you notice.
-For each, note what you observed and how it could change a scientific conclusion.
-
-Checkpoint questions:
-
-- Do you get the same accuracy if you restart the kernel and rerun?
-- Where does randomness enter?
-- Was the test set used only for final evaluation?
-
----
-
-## Part 1 — Extract functions (`fill_in_repo`)
 
 In `reproducible_knn/data.py` and `model.py`, complete:
 
