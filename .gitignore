@@ -3,5 +3,5 @@
 .mplconfig/
 .jupyter/
 .ipython/
-solution_repo/
 .venv/
+solution_repo/outputs/
