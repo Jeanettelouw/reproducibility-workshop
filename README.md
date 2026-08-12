@@ -9,12 +9,14 @@ Aimed at students with bare-minimum Python scripting skills.
 
 ## Layout
 
-| Path | Role |
-|---|---|
-| `starter_repo/` | Intentionally flawed KNN notebook students audit first |
-| `fill_in_repo/` | Skeleton solution: signatures + TODOs students complete |
-| `solution_repo/` | (NOT ADDED YET) Fully filled reference; reveal progressively |
-| `student_materials/` | Student handout |
+
+| Path                 | Role                                                    |
+| -------------------- | ------------------------------------------------------- |
+| `starter_repo/`      | Intentionally flawed KNN notebook students audit first  |
+| `fill_in_repo/`      | Skeleton solution: signatures + TODOs students complete |
+| `solution_repo/`     | Fully filled reference; reveal progressively            |
+| `student_materials/` | Student handout                                         |
+
 
 **Suggested path:** audit in `starter_repo/` → complete TODOs in `fill_in_repo/`
 → consult `solution_repo/` only when invited (or after a checkpoint).
@@ -45,3 +47,4 @@ That is the whole CLI: one config file, three short modules, saved metrics under
 - Student exercises: `student_materials/STUDENT_HANDOUT.md`
 - Fill-in setup: `fill_in_repo/README.md`
 - Solution setup: `solution_repo/README.md`
+
