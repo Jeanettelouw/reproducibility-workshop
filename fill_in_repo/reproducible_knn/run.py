@@ -1,3 +1,4 @@
+
 """Run the full experiment from the command line (no Jupyter needed).
 
 Usage:
@@ -74,7 +75,80 @@ def run_experiment(cfg):
     #
     # Config keys you will need: seed, n_samples, noise, scale_factor,
     # test_size, k_values, use_scaling, cv_folds, output_dir
-    raise NotImplementedError("TODO: implement run_experiment")
+
+    ##########
+    # Given 
+    #########
+    X, y = make_data(
+        n_samples=cfg["n_samples"],
+        noise=cfg["noise"],
+        scale_factor=cfg["scale_factor"],
+        seed=cfg["seed"],
+    )
+
+    X_train, X_test, y_train, y_test = split_data(
+        X,
+        y,
+        test_size=cfg["test_size"],
+        seed=cfg["seed"],
+    )
+
+    best_k, cv_results = choose_k(
+        X_train,
+        y_train,
+        k_values=cfg["k_values"],
+        use_scaling=cfg["use_scaling"],
+        seed=cfg["seed"],
+        cv_folds=cfg["cv_folds"],
+    )
+
+    model = make_knn(
+        k=best_k,
+        use_scaling=cfg["use_scaling"]
+    )
+
+    model.fit(X_train, y_train)
+
+    y_pred = model.predict(X_test)
+
+    test_accuracy = float(
+        accuracy_score(y_test, y_pred)
+    )
+
+
+    ###### 
+    # NEW
+    ######
+    out_dir = Path(cfg["output_dir"])
+    out_dir.mkdir(parents=True, exist_ok=True)
+
+    cm = confusion_matrix(y_test, y_pred).tolist()
+
+    metrics = {
+        "seed": cfg["seed"],
+        "use_scaling": cfg["use_scaling"],
+        "best_k": int(best_k),
+        "best_mean_cv_accuracy": float(
+            cv_results.iloc[0]["mean_cv_accuracy"]
+        ),
+        "test_accuracy": test_accuracy,
+        "confusion_matrix": cm,
+    }
+
+    with open(out_dir / "metrics.json", "w") as f:
+        json.dump(metrics, f, indent=2)
+
+    cv_results.to_csv(
+        out_dir / "cv_results.csv",
+        index=False
+    )
+
+    with open(out_dir / "config_used.yaml", "w") as f:
+        yaml.safe_dump(cfg, f)
+
+    save_figures(X, y, model, out_dir)
+
+    return out_dir, metrics
 
 
 def main(argv=None):
@@ -97,10 +171,12 @@ def main(argv=None):
     # TODO: load config, apply optional CLI seed override, run the experiment.
     #
     # 1. cfg = ??????
+    cfg = load_config(args.config)
+    
     if args.seed is not None: 
         cfg["seed"] = args.seed
     # 3. out_dir, metrics = ?????
-    raise NotImplementedError("TODO: wire main() config load + seed override")
+    out_dir, metrics = run_experiment(cfg)
 
     print(f"Wrote results to {out_dir.resolve()}")
     print(
