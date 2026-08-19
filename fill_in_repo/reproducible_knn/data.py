@@ -16,7 +16,18 @@ def make_data(n_samples, noise, scale_factor, seed):
     #   - convert X and y to numpy arrays (float / int)
     #   - multiply column 1 of X by scale_factor
     #   - return X, y
-    raise NotImplementedError("TODO: implement make_data")
+    X, y = make_moons( 
+            n_samples=n_samples,
+            noise=noise,
+            random_state=seed 
+        )
+    
+    X = np.asarray(X, dtype=float)
+    y = np.asarray(y, dtype=int)
+    
+    X[:, 1] *= scale_factor
+        
+    return X, y
 
 
 def split_data(X, y, test_size, seed):
@@ -26,4 +37,12 @@ def split_data(X, y, test_size, seed):
     #   - random_state=seed
     #   - stratify=y
     #   Return X_train, X_test, y_train, y_test
-    raise NotImplementedError("TODO: implement split_data")
+    X_train, X_test, y_train, y_test = train_test_split(
+        X,
+        y,
+        test_size=test_size,
+        random_state=seed,
+        stratify=y
+    )
+
+    return X_train, X_test, y_train, y_test
