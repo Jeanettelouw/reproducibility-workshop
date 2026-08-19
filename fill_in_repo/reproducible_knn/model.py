@@ -17,7 +17,13 @@ def make_knn(k, use_scaling):
     #   - if use_scaling is True, first step: ("scaler", StandardScaler())
     #   - always include: ("knn", KNeighborsClassifier(n_neighbors=k))
     # Do NOT fit a scaler on the full dataset outside the Pipeline.
-    raise NotImplementedError("TODO: implement make_knn")
+    if use_scaling:
+        return Pipeline([
+            ("scaler", StandardScaler()),
+            ("knn", KNeighborsClassifier(n_neighbors=k))
+        ])
+    else:
+        return KNeighborsClassifier(n_neighbors=k)
 
 
 def choose_k(X_train, y_train, k_values, use_scaling, seed, cv_folds):
@@ -35,4 +41,45 @@ def choose_k(X_train, y_train, k_values, use_scaling, seed, cv_folds):
     # 4. Return (best_k, results)  — best_k is the k in the top row
     #
     # Important: only use X_train / y_train here. Never touch the test set.
-    raise NotImplementedError("TODO: implement choose_k")
+    cv = StratifiedKFold(
+        n_splits=cv_folds,
+        shuffle=True,
+        random_state=seed
+    )
+    
+    results = []
+    
+    for k in k_values:
+    
+        model = make_knn(k=k, use_scaling=use_scaling)
+    
+        scores = cross_val_score(
+            model,
+            X_train,
+            y_train,
+            cv=cv,
+            scoring="accuracy"
+        )
+    
+        acc = scores.mean()
+        std = scores.std()
+    
+        results.append({
+            "k": k,
+            "mean_cv_accuracy": acc,
+            "std_cv_accuracy": std
+        })
+    
+        print(f"k={k} CV accuracy={acc:.3f}")
+    
+    results_df = pd.DataFrame(results)
+    
+    results_df = results_df.sort_values(
+        "mean_cv_accuracy",
+        ascending=False
+    ).reset_index(drop=True)
+    
+    best_k = results_df.loc[0, "k"]
+    
+    return best_k, results_df
+
